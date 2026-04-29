@@ -16,6 +16,7 @@ PathFilms01=""
 PathFilms02=""
 PathFilms03=""
 PathRunable=""
+PathArchive=""
 
 UidDocs01=""
 UidDocs02=""
@@ -27,6 +28,7 @@ UidFilms01=""
 UidFilms02=""
 UidFilms03=""
 UidRunable=""
+UidArchive=""
 
 
 PortLamp=
