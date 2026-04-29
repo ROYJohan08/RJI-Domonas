@@ -156,7 +156,7 @@ case $1 in
             -e PUID=$USER_ID  \
             -e PGID=$GROUP_ID  \
             -e USER="$Username"  \
-            -e PASS="$HighPassword" \
+            -e PASS="$LowPassword" \
             -e TRANSMISSION_DOWNLOAD_DIR=/downloads/SeedBox \
             lscr.io/linuxserver/transmission:latest
         
