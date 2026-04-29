@@ -183,7 +183,7 @@ case $1 in
 
     "med")
             sudo docker run -d  \
-            --name Myelectricdata  \
+            --name myelectricdata  \
             --restart=unless-stopped  \
             -v "${PathDkMed}/config.yaml":/data/config.yaml  \
             m4dm4rtig4n/myelectricaldata:latest
