@@ -175,16 +175,34 @@ case $1 in
             -v $PathDkFreshRss:/www/FreshRSS/data \
             -e 'CRON_MIN=1,31' \
             freshrss/freshrss
-        ;;
-
+    ;;
     "med")
             sudo docker run -d  \
             --name myelectricdata  \
             --restart=unless-stopped  \
             -v $PathDkMed:/data/config.yaml  \
             m4dm4rtig4n/myelectricaldata:latest
-        ;;
-
+    ;;
+    "siyuan")
+        sudo docker run -d  \
+            --privileged  \
+            --name siyuan  \
+            -p $PortSiyuan:6806  \
+            -v PathDkSi:/siyuan/workspace  \
+            --workspace=/siyuan/workspace  \
+            --restart=unless-stopped  \
+            --accessAuthCode\=$LowPassword  \
+            b3log/siyuan
+    ;;
+    "gitea")
+        sudo docker run -d  \
+            --name gitea  \
+            -p $PortGitea:3000  \
+            -p 222:22  \
+            -v $PathDkGitea:/data  \
+            --restart=unless-stopped  \
+            gitea/gitea:latest
+    ;;
     "all")
         # Appeler chaque cas un par un pour éviter la duplication de code
         $0 lamp
@@ -198,6 +216,8 @@ case $1 in
         $0 seedbox
         $0 freshrss
         $0 med
+        $0 siyuan
+        $0 gitea
     ;;
 
     *)
