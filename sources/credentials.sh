@@ -61,7 +61,7 @@ PathDkDownBox3="${PathRunable}/DownBox"
 PathDkSeedBox1="${PathRunable}/Docker/SB-Config"
 PathDkSeedBox2="${PathRunable}/DownBox"
 PathDkFreshRss="${PathRunable}/Docker/RS-Data"
-PathDkMed="${PathRunable}/Docker/ME-Config"
+PathDkMed="${PathRunable}/Docker/ME-Data/config.yaml"
 
 USER_ID=1000
 GROUP_ID=1000
