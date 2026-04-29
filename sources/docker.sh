@@ -159,14 +159,10 @@ case $1 in
             -e PASS="$LowPassword" \
             -e TRANSMISSION_DOWNLOAD_DIR=/downloads/SeedBox \
             lscr.io/linuxserver/transmission:latest
-        
-        # Installation Interface Web alternative
         sudo git clone https://github.com/ronggang/transmission-web-control.git
         sudo mkdir -p "$PathDkSeedBox1/GUI/"
         sudo cp -r transmission-web-control/src/* "$PathDkSeedBox1/GUI/"
         clean_git
-        
-        # Application de l'interface dans le conteneur
         sudo docker exec seedbox cp -r /config/GUI/index.html /usr/share/transmission/public_html/index.html
     ;;
     "freshrss")
@@ -185,7 +181,7 @@ case $1 in
             sudo docker run -d  \
             --name myelectricdata  \
             --restart=unless-stopped  \
-            -v "${PathDkMed}/config.yaml":/data/config.yaml  \
+            -v $PathDkMed:/data/config.yaml  \
             m4dm4rtig4n/myelectricaldata:latest
         ;;
 
