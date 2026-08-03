@@ -1,65 +1,131 @@
-#!/bin/sh
+#!/bin/bash
 
-source /etc/RJIDomoNas/credentials.sh
+# ==============================================================================
+# CONFIGURATION
+# ==============================================================================
+LOGFILE="/media/Archive01/log.dat"
+TARGET_DIR="/media/Archive01"
+MAX_LOG_SIZE=$((500 * 1024 * 1024))   # 500 MB
+DRY_RUN=0
 
-mount -U "$UIDArchive" /media/Archive
-echo "Montage du disque Archive" >> /etc/RJIDomoNas/Log/default.log
+# ==============================================================================
+# COULEURS TERMINAL
+# ==============================================================================
+C_RESET="\e[0m"
+C_GREEN="\e[32m"
+C_RED="\e[31m"
+C_YELLOW="\e[33m"
+C_BLUE="\e[34m"
 
-if mount | grep -q 'on /media/Archive '
-then
-	echo "Archivage ---- Creation des dossiers... " >> /etc/RJIDomoNas/Log/default.log
-	mkdir -p /media/Archive/Runable/Docker/ \
-         /media/Archive/Films/ \
-         /media/Archive/Series/ \
-         /media/Archive/Docs/18/ \
-         /media/Archive/Docs/Musiques/ \
-         /media/Archive/Docs/Photographies/ \
-         /media/Archive/Docs/Livres/ \
-         /media/Archive/Docs/Jeux/ > /dev/null
-	echo "Archivage ---- Creation des dossiers... OK" >> /etc/RJIDomoNas/Log/default.log
+log_term() { echo -e "${1}${2}${C_RESET}"; }
+log_file() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOGFILE"; }
 
-	echo "Archivage ---- Archivage des Docker..." >> /etc/RJIDomoNas/Log/default.log
- 	cp -a -d -f -R -u -v /media/Runable/Docker/* /media/Archive/Runable/Docker/  >> /media/Archive/Log.dat
-  	echo "Archivage ---- Archivage des Docker...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' du disque Series01..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Series01/*-A/ /media/Archive/Series/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' du disque Series01...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' du disque Series02..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Series02/*-A/ /media/Archive/Series/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' du disque Series02...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' du disque Series03..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Series03/*-A/ /media/Archive/Series/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' du disque Series03...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' du disque Film01..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Films01/*-A.* /media/Archive/Films/  >> /media/Archive/Log.dat
-	cp -a -d -f -R -u -v /media/Films01/*/*-A.* /media/Archive/Films/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' du disque Film01...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' du disque Film02..." >> /etc/RJIDomoNas/Log/default.log
-  	cp -a -d -f -R -u -v /media/Films02/*-A.* /media/Archive/Films/  >> /media/Archive/Log.dat
-	cp -a -d -f -R -u -v /media/Films02/*/*-A.* /media/Archive/Films/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' du disque Film02...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des documents +18..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v "/media/Docs01/18/"* "/media/Archive/Docs/18/"  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des documents +18...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des musiques..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Docs01/Musiques/* /media/Archive/Docs/Musiques/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des musiques...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des photos..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Docs01/Photographies/* /media/Archive/Docs/Photographies/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des photos...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des livres..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Docs01/Livres/* /media/Archive/Docs/Livres/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des livres...OK" >> /etc/RJIDomoNas/Log/default.log
-  	echo "Archivage ---- Archivage des '-A' des jeux..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Docs01/Jeux/*-A.* /media/Archive/Docs/Jeux/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage des '-A' des jeux...OK" >> /etc/RJIDomoNas/Log/default.log
-	echo "Archivage ---- Archivage de la SeedBox..." >> /etc/RJIDomoNas/Log/default.log
-	cp -a -d -f -R -u -v /media/Runable/DownBox/SeedBox/* /media/Archive/Runable/SeedBox/  >> /media/Archive/Log.dat
- 	echo "Archivage ---- Archivage de la SeedBox...OK" >> /etc/RJIDomoNas/Log/default.log
- 	echo "$(date "+%d/%m/%y %H:%M:%S")" > /media/Archive/LastArchive.dt
-  	echo "Archivage ---- Archivage ---- FIN"  >> /etc/RJIDomoNas/Log/default.log
+# ==============================================================================
+# ROTATION DES LOGS
+# ==============================================================================
+rotate_logs() {
+    if [[ -f "$LOGFILE" ]]; then
+        local size
+        size=$(stat -c%s "$LOGFILE")
+        if (( size > MAX_LOG_SIZE )); then
+            mv "$LOGFILE" "${LOGFILE}.old"
+            touch "$LOGFILE"
+            log_term "$C_YELLOW" "[LOG] Rotation effectuée (log.dat.old)"
+            log_file "Rotation des logs effectuée."
+        fi
+    fi
+}
+rotate_logs
 
-	umount $(findmnt -n -o TARGET --source UUID="$UIDArchive")
-	echo "Demontage du disque Archive" >> /etc/RJIDomoNas/Log/default.log
-	
+# ==============================================================================
+# VÉRIFICATION DU DISQUE
+# ==============================================================================
+if ! mountpoint -q "$TARGET_DIR"; then
+    log_term "$C_RED" "[ERREUR] Le disque $TARGET_DIR n'est pas monté."
+    log_file "ERREUR : disque non monté."
+    exit 1
 fi
+
+# ==============================================================================
+# FONCTION RSYNC
+# ==============================================================================
+sync_data() {
+    local source="$1"
+    local destination="$2"
+    shift 2
+    local filters=("$@")
+
+    mkdir -p "$destination"
+
+    log_term "$C_BLUE" "[SYNC] $source → $destination"
+    log_file "Début copie : $source -> $destination"
+
+    local rsync_args=(-av --log-file="$LOGFILE")
+    [[ $DRY_RUN -eq 1 ]] && rsync_args+=("--dry-run")
+
+    for f in "${filters[@]}"; do
+        rsync_args+=(--filter="$f")
+    done
+
+    if ionice -c 3 nice -n 19 rsync "${rsync_args[@]}" "$source" "$destination"; then
+        log_term "$C_GREEN" "[OK] $source"
+        log_file "Succès : $source"
+    else
+        log_term "$C_RED" "[ERREUR] $source"
+        log_file "ERREUR : copie échouée"
+    fi
+
+    echo "---------------------------------------------------" >> "$LOGFILE"
+}
+
+# ==============================================================================
+# COPIES DIRECTES (sans filtre)
+# ==============================================================================
+sync_data "/media/Runable/Docker/"            "/media/Archive01/Runable/Docker/"
+sync_data "/media/Runable/DownBox/SeedBox/"   "/media/Archive01/Runable/DownBox/"
+sync_data "/media/Docs01/Photographie/"       "/media/Archive01/Docs/Photographie/"
+sync_data "/media/Docs01/Musiques/"           "/media/Archive01/Docs/Musiques/"
+sync_data "/media/Docs01/Jeux/"               "/media/Archive01/Docs/Jeux/"
+sync_data "/media/Docs01/18/"                 "/media/Archive01/Docs/18/"
+sync_data "/var/www/html/"                    "/media/Archive01/www/"
+
+# ==============================================================================
+# FILMS : uniquement fichiers contenant "-A"
+# ==============================================================================
+sync_data "/media/Films01/" "/media/Archive01/Films/" \
+    "+ */" \
+    "+ *-A*" \
+    "- *"
+
+sync_data "/media/Films02/" "/media/Archive01/Films/" \
+    "+ */" \
+    "+ *-A*" \
+    "- *"
+
+# ==============================================================================
+# SERIES : pré‑sélection stricte des dossiers finissant par -A
+# ==============================================================================
+copy_series() {
+    local src="$1"
+    local dst="$2"
+
+    log_term "$C_BLUE" "[SCAN] Recherche des séries -A dans $src"
+    log_file "Scan séries -A dans $src"
+
+    find "$src" -maxdepth 1 -type d -name "*-A" | while read -r serie; do
+        local name
+        name=$(basename "$serie")
+
+        log_term "$C_GREEN" "[SERIE] $name"
+        log_file "Copie série : $name"
+
+        sync_data "$serie/" "$dst/$name/"
+    done
+}
+
+copy_series "/media/Series01/" "/media/Archive01/Series/"
+copy_series "/media/Series02/" "/media/Archive01/Series/"
+copy_series "/media/Series03/" "/media/Archive01/Series/"
+
+log_term "$C_GREEN" "[FIN] Archivage terminé."
+log_file "Archivage terminé."
