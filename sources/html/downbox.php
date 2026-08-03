@@ -1,7 +1,7 @@
 <?php
 	$os = "linux";
 	$rootName = "../../../media/Runable/DownBox/DownBox";
-	$tmdbKey = "fb4dd5658eacc7beeaa6c230ae1324f5";
+	$tmdbKey = "Key";
 	$deletePassword = "Mot de passe fort";
 	$fixedDestinationsPaths = [
 		"Docs01"   => "/media/Docs01",
