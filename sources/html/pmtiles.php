@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- MapLibre GL JS -->
-  <script src="https://unpkg.com/maplibre-gl@4.x/dist/maplibre-gl.js"></script>
-  <link href="https://unpkg.com/maplibre-gl@4.x/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="lib/maplibre-gl.js"></script>
+  <link href="lib/maplibre-gl.css" rel="stylesheet" />
 
   <!-- PMTiles Plugin -->
-  <script src="https://unpkg.com/pmtiles@3.x/dist/pmtiles.js"></script>
+  <script src="lib/pmtiles.js"></script>
 
   <style>
     body, html { margin: 0; padding: 0; height: 100%; width: 100%; background-color: #121212; }
@@ -32,7 +32,7 @@
       container: 'map',
       style: {
         version: 8,
-        glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+        glyphs: "fonts/{fontstack}/{range}.pbf",
         sources: {
           "protomaps": {
             "type": "vector",
@@ -73,7 +73,8 @@
             "source-layer": "places",
             "layout": {
               "text-field": "{name}",
-              "text-size": 13
+              "text-size": 13,
+              "text-font": ["OpenSansRegular"]
             },
             "paint": {
               "text-color": "#ffffff",
