@@ -40,32 +40,86 @@
           }
         },
         layers: [
-          // Fond d'écran sombre
+          // Fond d'écran terrestre (Google Dark Ground)
           {
             "id": "background",
             "type": "background",
-            "paint": { "background-color": "#121212" }
+            "paint": { "background-color": "#212124" }
           },
-          // Plan d'eau (Bleu foncé)
+          // Plan d'eau (Google Dark Water)
           {
             "id": "water",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "water",
-            "paint": { "fill-color": "#0e2a47" }
+            "paint": { "fill-color": "#17263c" }
           },
-          // Routes (Orange)
+          // Bâtiments (Google Dark Building Footprints)
           {
-            "id": "roads",
+            "id": "buildings",
+            "type": "fill",
+            "source": "protomaps",
+            "source-layer": "buildings",
+            "minzoom": 13,
+            "paint": {
+              "fill-color": "#282d34",
+              "fill-outline-color": "#1f2329",
+              "fill-opacity": 0.9
+            }
+          },
+          // Reseau routier secondaire et local (Rues)
+          {
+            "id": "roads_local",
             "type": "line",
             "source": "protomaps",
             "source-layer": "roads",
+            "filter": ["!=", ["get", "pmap:kind"], "highway"],
             "paint": {
-              "line-color": "#d97706",
-              "line-width": 1.2
+              "line-color": "#2c2d30",
+              "line-width": [
+                "interpolate", ["linear"], ["zoom"],
+                12, 1,
+                16, 4
+              ]
             }
           },
-          // Noms des Villes (Texte Blanc)
+          // Autoroutes et axes principaux (Google Dark Highways)
+          {
+            "id": "roads_highways",
+            "type": "line",
+            "source": "protomaps",
+            "source-layer": "roads",
+            "filter": ["==", ["get", "pmap:kind"], "highway"],
+            "paint": {
+              "line-color": "#3c4043",
+              "line-width": [
+                "interpolate", ["linear"], ["zoom"],
+                6, 1.5,
+                14, 5
+              ]
+            }
+          },
+          // Noms des voies / rues (Google Dark Street Labels)
+          {
+            "id": "labels_roads",
+            "type": "symbol",
+            "source": "protomaps",
+            "source-layer": "roads",
+            "minzoom": 13,
+            "layout": {
+              "symbol-placement": "line",
+              "text-field": "{name}",
+              "text-font": ["OpenSansRegular"],
+              "text-size": 11,
+              "text-max-angle": 30
+            },
+            "paint": {
+              "text-color": "#9aa0a6",
+              "text-halo-color": "#212124",
+              "text-halo-width": 2
+            }
+          },
+          // Noms des Villes et Lieux (Google Dark City Labels)
           {
             "id": "labels_places",
             "type": "symbol",
@@ -73,12 +127,16 @@
             "source-layer": "places",
             "layout": {
               "text-field": "{name}",
-              "text-size": 13,
-              "text-font": ["OpenSansRegular"]
+              "text-font": ["OpenSansRegular"],
+              "text-size": [
+                "interpolate", ["linear"], ["zoom"],
+                4, 11,
+                10, 16
+              ]
             },
             "paint": {
-              "text-color": "#ffffff",
-              "text-halo-color": "#121212",
+              "text-color": "#e8eaed",
+              "text-halo-color": "#212124",
               "text-halo-width": 2
             }
           }
