@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <title>Google Maps Dark Local</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  
   <!-- MapLibre GL JS -->
   <script src="lib/maplibre-gl.js"></script>
   <link href="lib/maplibre-gl.css" rel="stylesheet" />
-
+  
   <!-- PMTiles Plugin -->
   <script src="lib/pmtiles.js"></script>
 
