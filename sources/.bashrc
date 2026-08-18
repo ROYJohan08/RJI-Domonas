@@ -74,6 +74,7 @@ alias glances='glances -w &'
 alias cpa='cp -a -d -f -R -u -v '
 alias archive='bash /etc/RJIDomoNas/Archive.sh '
 alias tdpi='ssh $Username@192.168.1.54'
+alias maxcpu="ps aux --sort=-%cpu | head -n 6"
 
 ##################################################
 #                  Disk alias                    #
@@ -105,9 +106,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-##################################################
-#    @Date : 11/08/2025 08:40                    #
-#    @Author : @ROYJohan                         #
-#    @Version : 12b                              #
-##################################################
