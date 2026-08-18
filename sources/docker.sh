@@ -281,6 +281,28 @@ case "$1" in
 			-p "$PortCyberchef:8000" \
 			mpepping/cyberchef:latest
 	;;
+	"oolama")
+		remove_container ollama
+	    remove_container open-webui
+	    sudo docker pull ollama/ollama:latest
+	    sudo docker pull ghcr.io/open-webui/open-webui:main
+	    sudo docker run -d \
+	        --name ollama \
+	        --restart=unless-stopped \
+	        -e TZ=CET \
+	        -v "$PathDkOl/ollama:/root/.ollama" \
+	        -p 11434:11434 \
+	        ollama/ollama:latest
+	    sudo docker run -d \
+	        --name open-webui \
+	        --restart=unless-stopped \
+	        -e TZ=CET \
+	        -e OLLAMA_BASE_URL=http://127.0.0.1:11434 \
+	        --network=host \
+	        -v "$PathDkOl/webui:/app/backend/data" \
+	        -p "${PortOl}:8080" \
+	        ghcr.io/open-webui/open-webui:main
+	    ;;
 	"all")
 		for svc in lamp homeassistant jellyfin filebrowser portainer grocy mqtt downbox seedbox freshrss med kiwix gitea kolibri cyberchef; do
 			"$0" "$svc"
