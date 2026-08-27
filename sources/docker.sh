@@ -303,6 +303,16 @@ case "$1" in
 	        -p "${PortOl}:8080" \
 	        ghcr.io/open-webui/open-webui:main
 	    ;;
+	"monica")
+		remove_container monica
+		sudo docker pull monicahq/monica:latest
+		docker run -d \
+  			--name monica \
+  			-p 1205:80 \
+  			-v /media/Runable/Docker/MO-Data:/var/www/html/storage \
+  			--restart unless-stopped \
+  			monicahq/monica:latest
+	;;
 	"all")
 		for svc in lamp homeassistant jellyfin filebrowser portainer grocy mqtt downbox seedbox freshrss med kiwix gitea kolibri cyberchef; do
 			"$0" "$svc"
