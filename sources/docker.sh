@@ -313,6 +313,24 @@ case "$1" in
   			--restart unless-stopped \
   			monicahq/monica:latest
 	;;
+	"vaultwarden")
+		sudo docker rm -f vaultwarden
+		sudo docker pull vaultwarden/server:latest
+		docker run -d \
+  			--name vaultwarden \
+  			-e ROCKET_TLS='{certs="/data/ssl/filename.crt",key="/data/ssl/filename.key"}' \
+  			-e WEBSOCKET_ENABLED=true \
+  			-v /vw-data:/data \
+  			-p 1205:80 \
+  			-p 3012:3012 \
+  			--restart unless-stopped \
+  			vaultwarden/server:latest
+		sudo mkdir -p /media/Runable/Docker/VA-Data/ssl
+		sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  			-keyout /media/Runable/Docker/VA-Data/filename.key \
+  			-out /media/Runable/Docker/VA-Data/filename.crt \
+  			-subj "/CN=dsm.royjohan.fr"
+	;;
 	"all")
 		for svc in lamp homeassistant jellyfin filebrowser portainer grocy mqtt downbox seedbox freshrss med kiwix gitea kolibri cyberchef; do
 			"$0" "$svc"
